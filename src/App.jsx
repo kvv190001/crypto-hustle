@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import './App.css'
 import CoinInfo from './Components/CoinInfo'
+import SideNav from './Components/SideNav'
 
 const API_KEY = import.meta.env.VITE_APP_API_KEY
 
@@ -40,6 +41,7 @@ function App() {
 
   return (
     <div className='whole-page'>
+      <SideNav />
       <h1>My Crypto List</h1>
       <input
         type='text'
@@ -54,6 +56,7 @@ function App() {
               if (coinData.Algorithm !== "N/A" && coinData.ProofType !== "N/A"){
                 return(
                   <CoinInfo
+                    key={coinData.Name}
                     image={coinData.ImageUrl}
                     name={coinData.FullName}
                     symbol={coinData.Name}
@@ -70,6 +73,7 @@ function App() {
           )
           .map(coinData => (
             <CoinInfo 
+              key={coinData.Name}
               image={coinData.ImageUrl}
               name={coinData.FullName}
               symbol={coinData.Name}
