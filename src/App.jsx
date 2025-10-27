@@ -1,34 +1,82 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
+import { useEffect, useState } from 'react'
 import './App.css'
+import CoinInfo from './Components/CoinInfo'
+
+const API_KEY = import.meta.env.VITE_APP_API_KEY
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [list, setList] = useState(null)
+  const [filteredResults, setFilteredResults] = useState([])
+  const [searchInput, setSearchInput] = useState("")
+
+  useEffect(() => {
+    const fetchAllCoinData = async () => {
+      const response = await fetch(
+        "https://min-api.cryptocompare.com/data/top/totaltoptiervolfull?limit=10&tsym=USD&api_key="
+        + API_KEY
+      )
+      const json = await response.json()
+      setList(json)
+    }
+
+    fetchAllCoinData().catch(console.error)
+  }, [])
+
+  const searchItems = searchValue => {
+    setSearchInput(searchValue)
+    if(searchValue !== ""){
+      const filteredData = list.Data.filter((item) => 
+        Object.values(item.CoinInfo)
+        .join("")
+        .toLowerCase()
+        .includes(searchValue.toLowerCase())
+      )
+      setFilteredResults(filteredData)
+    } else{
+      setFilteredResults(list.Data)
+    }
+  }
+
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
+    <div className='whole-page'>
+      <h1>My Crypto List</h1>
+      <input
+        type='text'
+        placeholder='Search...'
+        onChange={(inputString) => searchItems(inputString.target.value)}
+      />
+      <ul>
+        { searchInput.length > 0 
+          ? filteredResults
+            .map(coin => {
+              const coinData = coin.CoinInfo
+              if (coinData.Algorithm !== "N/A" && coinData.ProofType !== "N/A"){
+                return(
+                  <CoinInfo
+                    image={coinData.ImageUrl}
+                    name={coinData.FullName}
+                    symbol={coinData.Name}
+                  />
+                )
+              }
+              return null
+            })
+          : list?.Data 
+          .map(data => data.CoinInfo)
+          .filter(coinData =>
+            coinData.Algorithm !== "N/A" &&
+            coinData.ProofType !== "N/A"
+          )
+          .map(coinData => (
+            <CoinInfo 
+              image={coinData.ImageUrl}
+              name={coinData.FullName}
+              symbol={coinData.Name}
+            />
+          ))}
+      </ul>
+    </div>
   )
 }
 
