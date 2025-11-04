@@ -1,5 +1,5 @@
 :root {
-    font-family: system-ui,Avenir,Helvetica,Arial,sans-serif;
+    font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
     line-height: 1.5;
     font-weight: 400;
     color-scheme: light dark;
@@ -50,13 +50,14 @@ button:hover {
     border-color: #646cff
 }
 
-button:focus,button:focus-visible {
+button:focus,
+button:focus-visible {
     outline: 4px auto -webkit-focus-ring-color
 }
 
 @media (prefers-color-scheme: light) {
     :root {
-        color:#213547;
+        color: #213547;
         background-color: #fff
     }
 
@@ -122,8 +123,8 @@ li.main-list {
     box-sizing: border-box
 }
 
-img{
-  width: 50px;
+img {
+    width: 50px;
 }
 
 .coin-left {
@@ -186,4 +187,18 @@ img{
 
 .news-article:hover {
     background: #232323
+}
+
+nav {
+    position: fixed;
+    top: 0;
+    right: 0;
+    z-index: 1000;
+    background: #1d1f1d;
+    margin: 20px 30px;
+    padding: 12px 24px;
+    border-radius: 8px;
+    display: flex;
+    gap: 18px;
+    align-items: center;
 }
